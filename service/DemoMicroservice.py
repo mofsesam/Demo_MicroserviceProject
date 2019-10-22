@@ -1,11 +1,20 @@
 from flask import Flask, request, jsonify, Response, abort
 from flask_sqlalchemy import SQLAlchemy
 
-from sesamutils import sesam_logger
+from sesamutils import sesam_logger, VariablesConfig
 from sesamutils.flask import serve
 
+required_env_vars = ["SUBDOMAIN", "API_ROOT"]
+optional_env_vars = ["DEBUG", "LOG_LEVEL"] # Default values can be given to optional environment variables by the use of tuples
+
+config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
+
+if not config.validate():
+    sys.exit(1)
+
+
 app = Flask(__name__)
-logger = sesam_logger('DemoMicroservice', app=app)
+logger = sesam_logger('DemoMicroservice', app=app,timestamp=True)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
