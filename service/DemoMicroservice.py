@@ -65,5 +65,9 @@ def update_ticket(orderID):
     except Exception as e:
         logger.error(f"Issue while fetching tickets from Zendesk {e}")
 
+@app.route('/api/order/generic/<path:txt>', methods=['GET','PUT','POST','DELETE'])
+def get_generic(txt):
+    return jsonify({'generic': f'{request.method} {txt}'})
+
 if __name__ == "__main__":
     serve(app)
