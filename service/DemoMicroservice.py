@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify, Response, abort
 from flask_sqlalchemy import SQLAlchemy
 
@@ -6,12 +8,6 @@ from sesamutils.flask import serve
 
 required_env_vars = ["SUBDOMAIN", "API_ROOT"]
 optional_env_vars = ["DEBUG", "LOG_LEVEL"] # Default values can be given to optional environment variables by the use of tuples
-
-config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
-
-if not config.validate():
-    sys.exit(1)
-
 
 app = Flask(__name__)
 logger = sesam_logger('DemoMicroservice', app=app,timestamp=True)
@@ -65,9 +61,13 @@ def update_ticket(orderID):
     except Exception as e:
         logger.error(f"Issue while fetching tickets from Zendesk {e}")
 
-@app.route('/api/order/generic/<path:txt>', methods=['GET','PUT','POST','DELETE'])
+@app.route('/api/generic/<path:txt>', methods=['GET','PUT','POST','DELETE'])
 def get_generic(txt):
     return jsonify({'generic': f'{request.method} {txt}'})
 
 if __name__ == "__main__":
+    config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
+    if not config.validate():
+        os.sys.exit(1)
+
     serve(app)
