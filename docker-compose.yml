@@ -8,10 +8,10 @@ services:
     environment:
       SUBDOMAIN: "test" 
       API_ROOT: "my.test/api/"
-      DEBUG: True 
+      DEBUG: "True" 
       LOG_LEVEL: "INFO"
-  mock-server:
-    image: stoplight/prism:3
-    ports:
-      - "4010:4010"
-    cmd: ["mock", "-h", "0.0.0.0", "api.oas3.yml"]
+  # mock-server:
+  #   image: stoplight/prism:3
+  #   ports:
+  #     - "4010:4010"
+  #   command: ["mock", "-h", "0.0.0.0", "api.oas3.yml"]

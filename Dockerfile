@@ -4,9 +4,8 @@ RUN apk update
 
 RUN pip install --upgrade pip
 
-COPY ./service/requirements.txt /service/requirements.txt
-RUN pip install -r /service/requirements.txt
 COPY ./service /service
+RUN pip install -r /service/requirements.txt
 
 EXPOSE 5000
 

@@ -1,27 +1,16 @@
 import os
 
 from flask import Flask, request, jsonify, Response, abort
-from flask_sqlalchemy import SQLAlchemy
 
 from sesamutils import sesam_logger, VariablesConfig
 from sesamutils.flask import serve
 
-required_env_vars = ["SUBDOMAIN", "API_ROOT"]
-optional_env_vars = ["DEBUG", "LOG_LEVEL"] # Default values can be given to optional environment variables by the use of tuples
+required_env_vars = ["SUBDOMAIN"]
+optional_env_vars = ["DEBUG", "LOG_LEVEL", ["API_ROOT","zendesk.com/api/v2/tickets/"]] # Default values can be given to optional environment variables by the use of tuples
 
 app = Flask(__name__)
+
 logger = sesam_logger('DemoMicroservice', app=app,timestamp=True)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
-
-class Order(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    Orders = db.Column(db.String(80))
-    TotalSum = db.Column(db.Integer())
-
-    def __repr__(self):
-        return '<User %r>' % self.username
 
 orders = [
 {
@@ -63,11 +52,11 @@ def update_ticket(orderID):
 
 @app.route('/api/generic/<path:txt>', methods=['GET','PUT','POST','DELETE'])
 def get_generic(txt):
-    return jsonify({'generic': f'{request.method} {txt}'})
+    return jsonify({'generic': f'{request.method} {txt}','orders': orders })
 
 if __name__ == "__main__":
     config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
-    if not config.validate():
-        os.sys.exit(1)
+    # if not config.validate():
+    #     os.sys.exit(1)
 
     serve(app)
