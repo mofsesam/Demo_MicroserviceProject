@@ -36,3 +36,14 @@ def test_generic_routes(client):
     rv = client.put('/api/generic/test/2')
     assert rv.json['generic'] == 'PUT test/2'
 
+def test_config(client):
+    """
+    GIVEN a response
+    WHEN endpoint /api/show/config get a call
+    THEN check if we get environment config
+    """
+    rv = client.get('/api/show/config')
+    assert b'config' in rv.data
+
+
+
