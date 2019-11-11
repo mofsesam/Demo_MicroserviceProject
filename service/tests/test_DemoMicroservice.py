@@ -18,12 +18,12 @@ def test_put_routes(client):
     assert b'Wimen1979' in rv.data
     rv = client.put('/api/orders/update/3')
     assert 'Gotin1984' in rv.json['Username']
-    rv = client.get('/api/orders/update/2')
-    assert b'GET' in rv.data
-    rv = client.post('/api/orders/update/2')
-    assert b'POST' in rv.data
-    rv = client.delete('/api/orders/update/2')
-    assert b'DELETE' in rv.data
+    # rv = client.get('/api/orders/update/2')
+    # assert b'GET' in rv.data
+    # rv = client.post('/api/orders/update/2')
+    # assert b'POST' in rv.data
+    # rv = client.delete('/api/orders/update/2')
+    # assert b'DELETE' in rv.data
 
 def test_generic_routes(client):
     """
@@ -35,15 +35,22 @@ def test_generic_routes(client):
     assert rv.json['generic'] == 'GET test/1'
     rv = client.put('/api/generic/test/2')
     assert rv.json['generic'] == 'PUT test/2'
+    rv = client.post('/api/generic/test/2',data=dict(
+            first_name="test",
+            last_name="test",
+            email="test",
+            password="test"
+        ))
+    print(rv.json)
 
-def test_config(client):
-    """
-    GIVEN a response
-    WHEN endpoint /api/show/config get a call
-    THEN check if we get environment config
-    """
-    rv = client.get('/api/show/config')
-    assert b'config' in rv.data
+# def test_config(client):
+#     """
+#     GIVEN a response
+#     WHEN endpoint /api/show/config get a call
+#     THEN check if we get environment config
+#     """
+#     rv = client.get('/api/show/config')
+#     assert b'config' in rv.data
 
 
 
