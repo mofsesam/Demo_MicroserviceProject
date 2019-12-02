@@ -9,7 +9,7 @@ services:
       SUBDOMAIN: "test" 
       API_ROOT: "my.test/api/"
       DEBUG: "True" 
-      LOG_LEVEL: "INFO"
+      LOG_LEVEL: "DEBUG"
   # mock-server:
   #   image: stoplight/prism:3
   #   ports:

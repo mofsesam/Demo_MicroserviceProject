@@ -52,7 +52,19 @@ def update_ticket(orderID):
 
 @app.route('/api/generic/<path:txt>', methods=['GET','PUT','POST','DELETE'])
 def get_generic(txt):
-    return jsonify({'generic': f'{request.method} {txt}','orders': orders })
+    method = request.method
+    if method == "POST" and request.is_json:
+        returnList = []
+        enteties = request.get_json()
+        logger.info(type(enteties))
+        for item in enteties:
+          item['Hello'] = "Hello, this is a test."
+          logger.info(type(item))
+          returnList.append(item)
+        return jsonify(returnList) , 200, {"Content-Type": "application/json"}
+    else: 
+        logger.info(f'Http method is {method}')
+        return "Only JSON on POST is supported.", 500, {"Content-Type": "text/plain"}
 
 @app.route('/api/show/config')
 def get_config():
@@ -60,7 +72,7 @@ def get_config():
 
 if __name__ == "__main__":
     config = VariablesConfig(required_env_vars, optional_env_vars=optional_env_vars)
-    logger.info(str(config))
+    # logger.info(str(config))
     # if not config.validate():
     #     os.sys.exit(1)
 
